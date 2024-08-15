@@ -48,8 +48,14 @@ class Annotator(BaseAnnotator):
         _ = secondary_data
         if secondary_data['dbsnp'] is not None:
             rsid = secondary_data['dbsnp'][0]["snp"]
-            self.cursor.execute("SELECT trait, p_value, pmid FROM dbgap WHERE rsid = :rsid",{"rsid": rsid})
-            qr = self.cursor.fetchone()
+            self.cursor.execute("""SELECT 
+                                    dbgap.trait_uid, dbgap.p_value, dbgap.pmid, trait.trait
+                                FROM 
+                                    dbgap
+                                INNER JOIN trait ON dbgap.trait_uid = trait.trait 
+                                WHERE rsid = :rsid"""
+                                ,{"rsid": rsid})
+            qr = self.cursor    .fetchone()
             if qr is None:
                 return None
-            return {"trait":qr[0], "p_value":qr[1], "pmid":qr[2]}
+            return {"trait_uid":qr[0], "p_value":qr[1], "pmid":qr[2], "trait":qr[3]}
