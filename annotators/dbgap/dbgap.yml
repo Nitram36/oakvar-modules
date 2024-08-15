@@ -25,8 +25,8 @@ secondary_inputs:
     - snp
   
 output_columns:
-  - name: trait
-    title: Trait
+  - name: trait_uid
+    title: Trait id
     type: int
   - name: pmid
     title: pubMed ID
@@ -34,6 +34,9 @@ output_columns:
   - name: p_value
     title: p-value
     type: float
+  - name: trait
+    title: trait description
+    type: string
 developer:
   module:
     name: ''
