@@ -22,7 +22,7 @@ secondary_inputs:
       primary: uid
       secondary: uid
     use_columns:
-    - snp
+    - rsid
   
 output_columns:
   - name: trait_uid
