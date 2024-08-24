@@ -11,8 +11,6 @@ def main():
 def dbgap_gen():
     db = sqlite3.connect('dbgap.sqlite')
     cur = db.cursor()
-    # cur.execute('DROP TABLE "dbgap"')
-
     df = pd.read_csv("PheGenI_Association_full.tab", sep = "\t")
     df2 = df.loc[:,['Trait', 'SNP rs', 'P-Value','PubMed']]
     df2.fillna(0)
@@ -20,14 +18,13 @@ def dbgap_gen():
     try:
         cur.execute("""
                 CREATE TABLE 'dbgap' (
-                    trait TEXT,
+                    trait_uid TEXT,
                     rsid INTEGER,
                     p_value REAL,
                     pubmed INTEGER
-
                 )
             """)
-        cur.execute("INSERT INTO dbgap (trait, rsid, p_value, pubmed) SELECT * FROM temp")
+        cur.execute("INSERT INTO dbgap (trait_uid, rsid, p_value, pubmed) SELECT * FROM temp")
         db.commit()
 
         cur.execute("DROP TABLE temp")
@@ -40,7 +37,13 @@ def dbgap_gen():
         )""")
 
         cur.execute("""
-                INSERT INTO trait (trait) SELECT DISTINCT(trait) FROM dbgap
+                INSERT INTO trait (trait) SELECT DISTINCT(trait_uid) FROM dbgap
+                    """)
+        db.commit()
+        cur.execute("""
+                UPDATE dbgap
+                    SET trait_uid = trait.uid FROM (SELECT uid,trait FROM trait) AS trait
+                    WHERE dbgap.trait_uid = trait.trait    
                     """)
         db.commit()
     finally:
