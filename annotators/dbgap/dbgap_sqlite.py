@@ -21,10 +21,10 @@ def dbgap_gen():
                     trait_uid TEXT,
                     rsid INTEGER,
                     p_value REAL,
-                    pubmed INTEGER
+                    pmid INTEGER
                 )
             """)
-        cur.execute("INSERT INTO dbgap (trait_uid, rsid, p_value, pubmed) SELECT * FROM temp")
+        cur.execute("INSERT INTO dbgap (trait_uid, rsid, p_value, pmid) SELECT * FROM temp")
         db.commit()
 
         cur.execute("DROP TABLE temp")
