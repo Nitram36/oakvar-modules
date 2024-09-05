@@ -48,7 +48,7 @@ class Annotator(BaseAnnotator):
         _ = secondary_data
         if secondary_data['dbsnp'] is not None:
             rsid_extract = secondary_data['dbsnp'][0]["rsid"]
-            rsid = int(rsid_extract[1:])
+            rsid = int(rsid_extract[2:])
             self.cursor.execute("""SELECT 
                                     dbgap.trait_uid, dbgap.p_value, dbgap.pmid, trait.trait
                                 FROM 
